@@ -1,5 +1,36 @@
-<html>
-<body>
-hello
-</body>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Trigger connector based on CAV value</title>
+    </head>
+    <body>
+        <form>
+            <!-- Update the value of the hidden field with the CAV folder and name (e.g. "@Routing.DNIS@") -->
+            <input type="hidden" id="duration" value="@Custom.voice_ai_duration@">
+        </form>
+
+        <script type="text/javascript">
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Update the following values as necessary
+                const connectorId = '300000000000043';      // ID of the connector you'd like launched
+                const durationInputFieldId = 'duration';    // This is the "id" of the hidden input field containing the CAV's value
+                const durationThreshold = 60;               // Duration threshold required to launch screen pop (in seconds)
+
+                const duration = document.getElementById(durationInputFieldId).value * 1;
+                console.log(`***** VoiceAI duration: ${duration}`);
+
+                if (duration > durationThreshold) {
+                    // Launch connector
+                    const parentDoc = window.parent.document;
+                    const connectorLink = parentDoc.getElementById(connectorId);
+                    connectorLink.click();
+                }
+            });
+    
+        </script>
+    </body>
 </html>
