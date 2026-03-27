@@ -41,12 +41,6 @@ define('3rdparty.bundle', [], function () {
 
         const interactionApi = Five9Sdk.CrmSdk.interactionApi();
 
-        // interactionApi.subscribe({
-        //     callStarted: async (interactionSubscriptionEvent) => {
-        //         await handleCallStarted(interactionSubscriptionEvent);
-        //     }
-        // });
-
         interactionApi.subscribe({
             callAccepted: params => {
                 interactionApi.getCav({interactionId: params.callData.interactionId, interactionSubType: params.callData.interactionSubType})
@@ -59,6 +53,7 @@ define('3rdparty.bundle', [], function () {
                     const durationThreshold = 60;               // Duration threshold required to launch screen pop (in seconds)
                     const connectorId = 'sfli-dropdownlist-connectors_300000000000043';      // ID of the connector you'd like launched
 
+                    // DO NOT TOUCH ANYTHING BELOW THIS COMMENT
                     const voice_ai_duration = cavList.find(
                         x => x.group === cavGroup && x.name === cavName
                     );
@@ -71,7 +66,6 @@ define('3rdparty.bundle', [], function () {
                         const connectorLink = document.getElementById(connectorId);
                         connectorLink.click();
                     }
-
                 });
             }
         });
