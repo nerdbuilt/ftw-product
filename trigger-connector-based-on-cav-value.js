@@ -7,19 +7,41 @@ define('3rdparty.bundle', [], function () {
     let _activeCall = null;
 
     
+    let freedomMetadataURL = "https://app.five9.com/appsvcs/rs/svc/auth/metadata";
+    let contextPaths = {
+        "agent_rest": "/appsvcs/rs/svc",
+        "agent_str": "/strsvcs/rs/svc",
+        "sup_rest": "/supsvcs/rs/svc"
+    };
+    let base_api_url;
+    let base_agents_api_url;
+    let f9OrgId;
+    let f9UserId;
 
-    async function getCurrentCalls() {
-        console.log('####', "getCurrentCalls()");
-        const endpointURL = `${base_agents_api_url}/agents/${f9UserId}/interactions/calls`;
-        console.log('####', endpointURL);
-        const response = await fetch(endpointURL, { credentials: 'include' });
-        const currentCalls = await response.json();
-        console.log('####', "Returned calls:");
-        console.log('####', currentCalls);
-        return currentCalls;
+    async function initialize() {
+        try {
+            const response = await fetch(freedomMetadataURL, { credentials: 'include' });
+            const data = await response.json();
+            f9OrgId = data.orgId;
+            f9UserId = data.userId;
+            base_api_url = "https://" + data.metadata.dataCenters[0].apiUrls[0].host + ":" + data.metadata.dataCenters[0].apiUrls[0].port;
+            base_agents_api_url = base_api_url + contextPaths.agent_rest;
+            base_supervisor_api_url = base_api_url + contextPaths.sup_rest;
+            console.log('####', "user ID: " + data.userId);
+            console.log('####', "Base Supervisor API URL: " + base_supervisor_api_url);
+            console.log('####', "Base Agent API URL: " + base_agents_api_url);
+            console.log('####', JSON.stringify(data));
+            document.querySelector(".metadata").innerHTML = JSON.stringify(data, undefined, 2);
+            return data;
+        } catch (error) {
+            console.log('####', "You must be logged into Five9 in another browser tab for this to work");
+            throw error;
+        }
     }
 
+
     async function getDomainCallVariables() {
+
         console.log('####', "getDomainCallVariables()");
         const endpointURL = `${base_agents_api_url}/orgs/${f9OrgId}/call_variables`;
         console.log('####', endpointURL);
@@ -42,7 +64,7 @@ define('3rdparty.bundle', [], function () {
 
     async function getFive9MetaData() {
         try {
-            console.info("Script: >>> getFive9MetaData");
+            console.info("#### Script: >>> getFive9MetaData");
 
             var response = await fetch("https://app.five9.com/appsvcs/rs/svc/auth/metadata", {
                 cache: "no-cache",
@@ -50,7 +72,7 @@ define('3rdparty.bundle', [], function () {
                 mode: "cors", // no-cors, cors, *same-origin.
             })
 
-            console.info(`Script: getFive9MetaData returned status ${response.status}`);
+            console.info(`#### Script: getFive9MetaData returned status ${response.status}`);
 
             let f9md;
             if (response.status === 200) {
@@ -61,14 +83,14 @@ define('3rdparty.bundle', [], function () {
             _five9Metadata = f9md;
 
         } catch (err) {
-            console.error("Script: getFive9MetaData failed: " + err);
+            console.error("#### Script: getFive9MetaData failed: " + err);
             throw err;
         }
 
     }
 
     async function getCallData() {
-        console.info("Script: >>> getCallData");
+        console.info("#### Script: >>> getCallData");
         try {
 
             let response = await fetch(
@@ -120,6 +142,15 @@ define('3rdparty.bundle', [], function () {
             console.log("#### _activeCall:", _activeCall);
 
             // Put your next custom logic here
+            // const domainCavs = await getDomainCallVariables();
+            // console.log('####', "Domain CAVs: ");
+            // console.log('####', domainCavs);
+            await initialize();
+            // const calls = await getCurrentCalls();
+            // const f9CurrentCallId = calls[0].id;
+            const domainCavs = await getDomainCallVariables();
+            console.log('####', "Domain CAVs:");
+            console.log('####', domainCavs);
 
         } catch (err) {
             console.error("#### handleCallStarted failed:", err);
@@ -177,13 +208,6 @@ define('3rdparty.bundle', [], function () {
                 console.log("#### interactionApi.subscribe -> callAccepted");
                 console.log("#### Call Accepted", interactionSubscriptionEvent);
                 // Add your custom logic here
-                
-                const calls = await getCurrentCalls();
-                const f9CurrentCallId = calls[0].id;
-                console.log("#### Call ID: ", f9CurrentCallId);
-                const domainCavs = await getDomainCallVariables();
-                console.log('####', "Domain CAVs: ");
-                console.log('####', domainCavs);
             }
         });
         interactionApi.subscribe({
