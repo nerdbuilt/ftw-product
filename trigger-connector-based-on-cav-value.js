@@ -55,7 +55,7 @@ define('3rdparty.bundle', [], function () {
             cavs[cav.group][cav.name]["restrictions"] = cav.restrictions;
         });
         console.log('####', "Domain CAVs after transformation:");
-        console.log('####', cavs['Custom']['voice_ai_duration']);
+        console.log('####', cavs['Custom']['voice_ai_duration'].value);
         return cavs;
     }
 
