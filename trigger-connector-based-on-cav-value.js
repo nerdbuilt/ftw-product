@@ -62,13 +62,16 @@ define('3rdparty.bundle', [], function () {
                     const voice_ai_duration = cavList.find(
                         x => x.group === $(cavGroup) && x.name === $(cavName)
                     );
+                    console.debug(`#### VoiceIA duration: ${voice_ai_duration}`);
                     const duration = voice_ai_duration?.value * 1;
                     console.debug(`#### ${cavGroup}.${cavName}: ${duration}`);
 
                     if (duration > durationThreshold) {
+                        console.debug(`#### Duration is greater threshold`);
                         // Launch connector
                         const parentDoc = window.parent.document;
                         const connectorLink = parentDoc.getElementById(connectorId);
+                        console.debug(connectorLink);
                         connectorLink.click();
                     }
 
