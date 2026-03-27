@@ -66,11 +66,9 @@ define('3rdparty.bundle', [], function () {
                     console.debug(`#### ${cavGroup}.${cavName}: ${duration}`);
 
                     if (duration > durationThreshold) {
-                        console.debug(`#### Duration is greater threshold`);
+                        console.debug(`#### Duration is greater threshold, launching connector`);
                         // Launch connector
-                        // const parentDoc = window.parent.document;
                         const connectorLink = document.getElementById(connectorId);
-                        alert(connectorId, connectorLink);
                         connectorLink.click();
                     }
 
