@@ -57,7 +57,7 @@ define('3rdparty.bundle', [], function () {
                     const cavGroup = "Custom";                  // Call Variable Group
                     const cavName = "voice_ai_duration";        // Call Variable Name
                     const durationThreshold = 60;               // Duration threshold required to launch screen pop (in seconds)
-                    const connectorId = '300000000000043';      // ID of the connector you'd like launched
+                    const connectorId = 'sfli-dropdownlist-connectors_300000000000043';      // ID of the connector you'd like launched
 
                     const voice_ai_duration = cavList.find(
                         x => x.group === cavGroup && x.name === cavName
