@@ -68,9 +68,9 @@ define('3rdparty.bundle', [], function () {
                     if (duration > durationThreshold) {
                         console.debug(`#### Duration is greater threshold`);
                         // Launch connector
-                        const parentDoc = window.parent.document;
-                        const connectorLink = parentDoc.getElementById(connectorId);
-                        console.debug('####', connectorLink);
+                        // const parentDoc = window.parent.document;
+                        const connectorLink = document.getElementById(connectorId);
+                        alert(connectorId, connectorLink);
                         connectorLink.click();
                     }
 
