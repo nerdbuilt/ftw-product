@@ -60,7 +60,7 @@ define('3rdparty.bundle', [], function () {
                     const connectorId = '300000000000043';      // ID of the connector you'd like launched
 
                     const voice_ai_duration = cavList.find(
-                        x => x.group === "Custom" && x.name === "voice_ai_duration"
+                        x => x.group === cavGroup && x.name === cavName
                     );
                     console.debug(`#### VoiceIA duration: ${voice_ai_duration}`);
                     const duration = voice_ai_duration?.value * 1;
