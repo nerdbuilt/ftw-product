@@ -7,59 +7,59 @@ define('3rdparty.bundle', [], function () {
     let _activeCall = null;
 
     
-    let freedomMetadataURL = "https://app.five9.com/appsvcs/rs/svc/auth/metadata";
-    let contextPaths = {
-        "agent_rest": "/appsvcs/rs/svc",
-        "agent_str": "/strsvcs/rs/svc",
-        "sup_rest": "/supsvcs/rs/svc"
-    };
-    let base_api_url;
-    let base_agents_api_url;
-    let f9OrgId;
-    let f9UserId;
+    // let freedomMetadataURL = "https://app.five9.com/appsvcs/rs/svc/auth/metadata";
+    // let contextPaths = {
+    //     "agent_rest": "/appsvcs/rs/svc",
+    //     "agent_str": "/strsvcs/rs/svc",
+    //     "sup_rest": "/supsvcs/rs/svc"
+    // };
+    // let base_api_url;
+    // let base_agents_api_url;
+    // let f9OrgId;
+    // let f9UserId;
 
-    async function initialize() {
-        try {
-            const response = await fetch(freedomMetadataURL, { credentials: 'include' });
-            const data = await response.json();
-            f9OrgId = data.orgId;
-            f9UserId = data.userId;
-            base_api_url = "https://" + data.metadata.dataCenters[0].apiUrls[0].host + ":" + data.metadata.dataCenters[0].apiUrls[0].port;
-            base_agents_api_url = base_api_url + contextPaths.agent_rest;
-            base_supervisor_api_url = base_api_url + contextPaths.sup_rest;
-            console.log('####', "user ID: " + data.userId);
-            console.log('####', "Base Supervisor API URL: " + base_supervisor_api_url);
-            console.log('####', "Base Agent API URL: " + base_agents_api_url);
-            console.log('####', JSON.stringify(data));
-            return data;
-        } catch (error) {
-            console.log('####', "You must be logged into Five9 in another browser tab for this to work");
-            throw error;
-        }
-    }
+    // async function initialize() {
+    //     try {
+    //         const response = await fetch(freedomMetadataURL, { credentials: 'include' });
+    //         const data = await response.json();
+    //         f9OrgId = data.orgId;
+    //         f9UserId = data.userId;
+    //         base_api_url = "https://" + data.metadata.dataCenters[0].apiUrls[0].host + ":" + data.metadata.dataCenters[0].apiUrls[0].port;
+    //         base_agents_api_url = base_api_url + contextPaths.agent_rest;
+    //         base_supervisor_api_url = base_api_url + contextPaths.sup_rest;
+    //         console.log('####', "user ID: " + data.userId);
+    //         console.log('####', "Base Supervisor API URL: " + base_supervisor_api_url);
+    //         console.log('####', "Base Agent API URL: " + base_agents_api_url);
+    //         console.log('####', JSON.stringify(data));
+    //         return data;
+    //     } catch (error) {
+    //         console.log('####', "You must be logged into Five9 in another browser tab for this to work");
+    //         throw error;
+    //     }
+    // }
 
 
-    async function getDomainCallVariables() {
+    // async function getDomainCallVariables() {
 
-        console.log('####', "getDomainCallVariables()");
-        const endpointURL = `${base_agents_api_url}/orgs/${f9OrgId}/call_variables`;
-        console.log('####', endpointURL);
-        const response = await fetch(endpointURL, { credentials: 'include' });
-        const res = await response.json();
-        console.log('####', "Domain CAVs:");
-        console.log('####', res);
-        const cavs = {};
-        res.forEach((cav) => {
-            cavs[cav.group] = cavs[cav.group] || {};
-            cavs[cav.group][cav.name] = cavs[cav.group][cav.name] || {};
-            cavs[cav.group][cav.name]["id"] = cav.id;
-            cavs[cav.group][cav.name]["type"] = cav.type;
-            cavs[cav.group][cav.name]["restrictions"] = cav.restrictions;
-        });
-        console.log('####', "Domain CAVs after transformation:");
-        console.log('####', cavs);
-        return cavs;
-    }
+    //     console.log('####', "getDomainCallVariables()");
+    //     const endpointURL = `${base_agents_api_url}/orgs/${f9OrgId}/call_variables`;
+    //     console.log('####', endpointURL);
+    //     const response = await fetch(endpointURL, { credentials: 'include' });
+    //     const res = await response.json();
+    //     console.log('####', "Domain CAVs:");
+    //     console.log('####', res);
+    //     const cavs = {};
+    //     res.forEach((cav) => {
+    //         cavs[cav.group] = cavs[cav.group] || {};
+    //         cavs[cav.group][cav.name] = cavs[cav.group][cav.name] || {};
+    //         cavs[cav.group][cav.name]["id"] = cav.id;
+    //         cavs[cav.group][cav.name]["type"] = cav.type;
+    //         cavs[cav.group][cav.name]["restrictions"] = cav.restrictions;
+    //     });
+    //     console.log('####', "Domain CAVs after transformation:");
+    //     console.log('####', cavs);
+    //     return cavs;
+    // }
 
     async function getFive9MetaData() {
         try {
@@ -129,45 +129,45 @@ define('3rdparty.bundle', [], function () {
         }
     }
 
-    async function handleCallStarted(interactionSubscriptionEvent) {
-        try {
-            console.log("#### Call Started", interactionSubscriptionEvent);
+    // async function handleCallStarted(interactionSubscriptionEvent) {
+    //     try {
+    //         console.log("#### Call Started", interactionSubscriptionEvent);
 
-            await getFive9MetaData();
-            await getCallData();
+    //         await getFive9MetaData();
+    //         await getCallData();
 
-            console.log("#### Finished post-callStarted API flow");
-            console.log("#### _five9Metadata:", _five9Metadata);
-            console.log("#### _activeCall:", _activeCall);
+    //         console.log("#### Finished post-callStarted API flow");
+    //         console.log("#### _five9Metadata:", _five9Metadata);
+    //         console.log("#### _activeCall:", _activeCall);
 
-            // Put your next custom logic here
+    //         // Put your next custom logic here
 
-        } catch (err) {
-            console.error("#### handleCallStarted failed:", err);
-        }
-    }
+    //     } catch (err) {
+    //         console.error("#### handleCallStarted failed:", err);
+    //     }
+    // }
 
-    async function handleCallAccepted(interactionSubscriptionEvent) {
-        try {
-            console.log("#### Call Accepted", interactionSubscriptionEvent);
+    // async function handleCallAccepted(interactionSubscriptionEvent) {
+    //     try {
+    //         console.log("#### Call Accepted", interactionSubscriptionEvent);
 
-            // await getFive9MetaData();
-            // await getCallData();
+    //         // await getFive9MetaData();
+    //         // await getCallData();
 
-            // console.log("#### Finished post-callStarted API flow");
-            // console.log("#### _five9Metadata:", _five9Metadata);
-            console.log("#### _activeCall:", _activeCall);
+    //         // console.log("#### Finished post-callStarted API flow");
+    //         // console.log("#### _five9Metadata:", _five9Metadata);
+    //         console.log("#### _activeCall:", _activeCall);
 
-            // Put your next custom logic here
-            await initialize();
-            const domainCavs = await getDomainCallVariables();
-            console.log('####', "Domain CAVs:");
-            console.log('####', domainCavs);
+    //         // Put your next custom logic here
+    //         await initialize();
+    //         const domainCavs = await getDomainCallVariables();
+    //         console.log('####', "Domain CAVs:");
+    //         console.log('####', domainCavs);
 
-        } catch (err) {
-            console.error("#### handleCallAccepted failed:", err);
-        }
-    }
+    //     } catch (err) {
+    //         console.error("#### handleCallAccepted failed:", err);
+    //     }
+    // }
 
     function loadSdkInIframe(url, callback) {
         const iframe = document.createElement('iframe');
@@ -209,18 +209,31 @@ define('3rdparty.bundle', [], function () {
 
         const interactionApi = Five9Sdk.CrmSdk.interactionApi();
 
+        // interactionApi.subscribe({
+        //     callStarted: async (interactionSubscriptionEvent) => {
+        //         await handleCallStarted(interactionSubscriptionEvent);
+        //     }
+        // });
         interactionApi.subscribe({
-            callStarted: async (interactionSubscriptionEvent) => {
-                await handleCallStarted(interactionSubscriptionEvent);
-
+            callStarted: params => {
+                interactionApi.getCav({interactionId: params.callData.interactionId, interactionSubType: params.callData.interactionSubType})
+                .then(cavList => {
+                    console.debug('Interaction API got cavList: ' + JSON.stringify(cavList));
+                });
             }
         });
         interactionApi.subscribe({
-            callAccepted: async (interactionSubscriptionEvent) => {
-                console.log("#### interactionApi.subscribe -> callAccepted");
-                console.log("#### Call Accepted", interactionSubscriptionEvent);
-                // Add your custom logic here
-                await handleCallAccepted(interactionSubscriptionEvent);
+            // callAccepted: async (interactionSubscriptionEvent) => {
+            //     console.log("#### interactionApi.subscribe -> callAccepted");
+            //     console.log("#### Call Accepted", interactionSubscriptionEvent);
+            //     // // Add your custom logic here
+            //     await handleCallAccepted(interactionSubscriptionEvent);
+            // }
+            callAccepted: params => {
+                interactionApi.getCav({interactionId: params.callData.interactionId, interactionSubType: params.callData.interactionSubType})
+                .then(cavList => {
+                    console.debug('Interaction API got cavList: ' + JSON.stringify(cavList));
+                });
             }
         });
         interactionApi.subscribe({
