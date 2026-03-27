@@ -1,5 +1,3 @@
-console.log('#### HELLO ####');
-
 define('3rdparty.bundle', [], function () {
     console.log("#### 3rdparty.bundle.js loaded");
 
@@ -215,14 +213,14 @@ define('3rdparty.bundle', [], function () {
 
             }
         });
-        interactionApi.subscribe({
-            callAccepted: async (interactionSubscriptionEvent) => {
-                console.log("#### interactionApi.subscribe -> callAccepted");
-                console.log("#### Call Accepted", interactionSubscriptionEvent);
-                // Add your custom logic here
-                await handleCallAccepted(interactionSubscriptionEvent);
-            }
-        });
+        // interactionApi.subscribe({
+        //     callAccepted: async (interactionSubscriptionEvent) => {
+        //         console.log("#### interactionApi.subscribe -> callAccepted");
+        //         console.log("#### Call Accepted", interactionSubscriptionEvent);
+        //         // Add your custom logic here
+        //         await handleCallAccepted(interactionSubscriptionEvent);
+        //     }
+        // });
         interactionApi.subscribe({
             callRejected: (interactionSubscriptionEvent) => {
                 console.log("#### Call Rejected", interactionSubscriptionEvent);
