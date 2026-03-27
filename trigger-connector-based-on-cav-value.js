@@ -1,3 +1,5 @@
+console.log('#### HELLO ####');
+
 let freedomMetadataURL = "https://app.five9.com/appsvcs/rs/svc/auth/metadata";
 let contextPaths = {
     "agent_rest": "/appsvcs/rs/svc",
