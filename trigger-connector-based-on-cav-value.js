@@ -9,6 +9,7 @@ define('3rdparty.bundle', [], function () {
     
 
     async function getCurrentCalls() {
+        console.log('####', "getCurrentCalls()");
         const endpointURL = `${base_agents_api_url}/agents/${f9UserId}/interactions/calls`;
         console.log('####', endpointURL);
         const response = await fetch(endpointURL, { credentials: 'include' });
@@ -19,6 +20,7 @@ define('3rdparty.bundle', [], function () {
     }
 
     async function getDomainCallVariables() {
+        console.log('####', "getDomainCallVariables()");
         const endpointURL = `${base_agents_api_url}/orgs/${f9OrgId}/call_variables`;
         console.log('####', endpointURL);
         const response = await fetch(endpointURL, { credentials: 'include' });
@@ -172,13 +174,15 @@ define('3rdparty.bundle', [], function () {
         });
         interactionApi.subscribe({
             callAccepted: async (interactionSubscriptionEvent) => {
+                console.log("#### interactionApi.subscribe -> callAccepted");
                 console.log("#### Call Accepted", interactionSubscriptionEvent);
                 // Add your custom logic here
                 
                 const calls = await getCurrentCalls();
                 const f9CurrentCallId = calls[0].id;
+                console.log("#### Call ID: ", f9CurrentCallId);
                 const domainCavs = await getDomainCallVariables();
-                console.log('####', "Domain CAVs:");
+                console.log('####', "Domain CAVs: ");
                 console.log('####', domainCavs);
             }
         });
