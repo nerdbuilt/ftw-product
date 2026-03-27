@@ -6,6 +6,38 @@ define('3rdparty.bundle', [], function () {
     let _five9Metadata = null;
     let _activeCall = null;
 
+    
+
+    async function getCurrentCalls() {
+        const endpointURL = `${base_agents_api_url}/agents/${f9UserId}/interactions/calls`;
+        console.log('####', endpointURL);
+        const response = await fetch(endpointURL, { credentials: 'include' });
+        const currentCalls = await response.json();
+        console.log('####', "Returned calls:");
+        console.log('####', currentCalls);
+        return currentCalls;
+    }
+
+    async function getDomainCallVariables() {
+        const endpointURL = `${base_agents_api_url}/orgs/${f9OrgId}/call_variables`;
+        console.log('####', endpointURL);
+        const response = await fetch(endpointURL, { credentials: 'include' });
+        const res = await response.json();
+        console.log('####', "Domain CAVs:");
+        console.log('####', res);
+        const cavs = {};
+        res.forEach((cav) => {
+            cavs[cav.group] = cavs[cav.group] || {};
+            cavs[cav.group][cav.name] = cavs[cav.group][cav.name] || {};
+            cavs[cav.group][cav.name]["id"] = cav.id;
+            cavs[cav.group][cav.name]["type"] = cav.type;
+            cavs[cav.group][cav.name]["restrictions"] = cav.restrictions;
+        });
+        console.log('####', "Domain CAVs after transformation:");
+        console.log('####', cavs);
+        return cavs;
+    }
+
     async function getFive9MetaData() {
         try {
             console.info("Script: >>> getFive9MetaData");
@@ -139,9 +171,15 @@ define('3rdparty.bundle', [], function () {
             }
         });
         interactionApi.subscribe({
-            callAccepted: (interactionSubscriptionEvent) => {
+            callAccepted: async (interactionSubscriptionEvent) => {
                 console.log("#### Call Accepted", interactionSubscriptionEvent);
                 // Add your custom logic here
+                
+                const calls = await getCurrentCalls();
+                const f9CurrentCallId = calls[0].id;
+                const domainCavs = await getDomainCallVariables();
+                console.log('####', "Domain CAVs:");
+                console.log('####', domainCavs);
             }
         });
         interactionApi.subscribe({
