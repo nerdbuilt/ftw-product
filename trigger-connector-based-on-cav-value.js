@@ -31,7 +31,6 @@ define('3rdparty.bundle', [], function () {
             console.log('####', "Base Supervisor API URL: " + base_supervisor_api_url);
             console.log('####', "Base Agent API URL: " + base_agents_api_url);
             console.log('####', JSON.stringify(data));
-            document.querySelector(".metadata").innerHTML = JSON.stringify(data, undefined, 2);
             return data;
         } catch (error) {
             console.log('####', "You must be logged into Five9 in another browser tab for this to work");
@@ -142,18 +141,31 @@ define('3rdparty.bundle', [], function () {
             console.log("#### _activeCall:", _activeCall);
 
             // Put your next custom logic here
-            // const domainCavs = await getDomainCallVariables();
-            // console.log('####', "Domain CAVs: ");
-            // console.log('####', domainCavs);
+
+        } catch (err) {
+            console.error("#### handleCallStarted failed:", err);
+        }
+    }
+
+    async function handleCallAccepted(interactionSubscriptionEvent) {
+        try {
+            console.log("#### Call Accepted", interactionSubscriptionEvent);
+
+            // await getFive9MetaData();
+            // await getCallData();
+
+            // console.log("#### Finished post-callStarted API flow");
+            // console.log("#### _five9Metadata:", _five9Metadata);
+            console.log("#### _activeCall:", _activeCall);
+
+            // Put your next custom logic here
             await initialize();
-            // const calls = await getCurrentCalls();
-            // const f9CurrentCallId = calls[0].id;
             const domainCavs = await getDomainCallVariables();
             console.log('####', "Domain CAVs:");
             console.log('####', domainCavs);
 
         } catch (err) {
-            console.error("#### handleCallStarted failed:", err);
+            console.error("#### handleCallAccepted failed:", err);
         }
     }
 
@@ -208,6 +220,7 @@ define('3rdparty.bundle', [], function () {
                 console.log("#### interactionApi.subscribe -> callAccepted");
                 console.log("#### Call Accepted", interactionSubscriptionEvent);
                 // Add your custom logic here
+                await handleCallAccepted(interactionSubscriptionEvent);
             }
         });
         interactionApi.subscribe({
