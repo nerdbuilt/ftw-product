@@ -48,22 +48,30 @@ define('3rdparty.bundle', [], function () {
         // });
 
         interactionApi.subscribe({
-            // callAccepted: async (interactionSubscriptionEvent) => {
-            //     console.log("#### interactionApi.subscribe -> callAccepted");
-            //     console.log("#### Call Accepted", interactionSubscriptionEvent);
-            //     // // Add your custom logic here
-            //     await handleCallAccepted(interactionSubscriptionEvent);
-            // }
             callAccepted: params => {
                 interactionApi.getCav({interactionId: params.callData.interactionId, interactionSubType: params.callData.interactionSubType})
                 .then(cavList => {
-                    let voice_ai_duration = cavList.find(
-                        x => x.group === "Custom" && x.name === "voice_ai_duration"
-                    );
-                    voice_ai_duration = voice_ai_duration?.value;
                     // console.debug('#### Interaction API got cavList: ' + JSON.stringify(cavList));
-                    console.debug('#### voice_ai_duration: ' + voice_ai_duration);
-                    alert(voice_ai_duration);
+
+                    // Update the following values as necessary
+                    const cavGroup = "Custom";                  // Call Variable Group
+                    const cavName = "voice_ai_duration";        // Call Variable Name
+                    const durationThreshold = 60;               // Duration threshold required to launch screen pop (in seconds)
+                    const connectorId = '300000000000043';      // ID of the connector you'd like launched
+
+                    const voice_ai_duration = cavList.find(
+                        x => x.group === $(cavGroup) && x.name === $(cavName)
+                    );
+                    const duration = voice_ai_duration?.value * 1;
+                    console.debug(`#### ${cavGroup}.${cavName}: ${duration}`);
+
+                    if (duration > durationThreshold) {
+                        // Launch connector
+                        const parentDoc = window.parent.document;
+                        const connectorLink = parentDoc.getElementById(connectorId);
+                        connectorLink.click();
+                    }
+
                 });
             }
         });
