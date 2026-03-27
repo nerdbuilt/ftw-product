@@ -223,7 +223,13 @@ define('3rdparty.bundle', [], function () {
             callAccepted: params => {
                 interactionApi.getCav({interactionId: params.callData.interactionId, interactionSubType: params.callData.interactionSubType})
                 .then(cavList => {
-                    console.debug('Interaction API got cavList: ' + JSON.stringify(cavList));
+                    // cavList = JSON.stringify(cavList);
+                    const voice_ai_duration = cavList.find(
+                        x => x.group === "Custom" && x.name === "voice_ai_duration"
+                    );
+
+                    console.debug('#### Interaction API got cavList: ' + cavList);
+                    console.debug('#### voice_ai_duration: ' + voice_ai_duration?.value);
                 });
             }
         });
